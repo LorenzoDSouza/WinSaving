@@ -1,5 +1,6 @@
 package com.WinSaving.api.domain;
 
+import com.WinSaving.api.domain.enums.ExpenseType;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -18,6 +19,9 @@ public class Expense {
     @ManyToOne
     @JoinColumn(name = "monthly_budget_id")
     private MonthlyBudget monthlyBudget;
+
+    @Enumerated(EnumType.STRING)
+    private ExpenseType expenseType;
 
 }
 
