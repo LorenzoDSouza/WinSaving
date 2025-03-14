@@ -1,15 +1,12 @@
 package com.WinSaving.api.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "saving_goal")
-public class SavingGoal {
+public class SavingGoal {//lombok recomenda a notacao @getter e @setter, substitui os metodos?
 
     @Id
     @GeneratedValue
@@ -23,6 +20,9 @@ public class SavingGoal {
     private Double goalAmount;
     private Double totalAmount;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     //getters and setters
 
@@ -72,5 +72,13 @@ public class SavingGoal {
 
     public void setTotalAmount(Double totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
