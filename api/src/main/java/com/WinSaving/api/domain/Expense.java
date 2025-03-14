@@ -12,12 +12,12 @@ public class Expense {
     @Id
     @GeneratedValue
     private UUID id;
+    private Double value;
 
     @Enumerated(EnumType.STRING)
     private ExpenseType expenseType;
     private String description;
 
-    private Double value;
 
     @ManyToOne
     @JoinColumn(name = "monthly_budget_id")
@@ -65,5 +65,7 @@ public class Expense {
     public void setExpenseType(ExpenseType expenseType) {
         this.expenseType = expenseType;
     }
+
+
 }
 

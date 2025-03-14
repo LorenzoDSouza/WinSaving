@@ -23,7 +23,7 @@ public class SavingGoal {
     private Double goalAmount;
     private Double totalAmount;
 
-    
+
     //getters and setters
 
     public UUID getId() {

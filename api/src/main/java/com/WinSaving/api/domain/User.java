@@ -72,4 +72,16 @@ public class User {
     public void setMonthlyBudget(MonthlyBudget monthlyBudget) {
         this.monthlyBudget = monthlyBudget;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", monthlyBudget id=" + monthlyBudget.getId() +
+                '}';
+    }
 }
