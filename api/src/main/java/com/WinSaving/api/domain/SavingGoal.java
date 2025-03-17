@@ -2,6 +2,7 @@ package com.WinSaving.api.domain;
 
 import jakarta.persistence.*;
 
+import java.sql.Date;
 import java.util.UUID;
 
 @Entity
@@ -16,6 +17,8 @@ public class SavingGoal {//lombok recomenda a notacao @getter e @setter, substit
     private String purpose;
 
     private String depositPlace;
+
+    private Date dueDate;
 
     private Double goalAmount;
     private Double totalAmount;
@@ -80,5 +83,13 @@ public class SavingGoal {//lombok recomenda a notacao @getter e @setter, substit
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
     }
 }
