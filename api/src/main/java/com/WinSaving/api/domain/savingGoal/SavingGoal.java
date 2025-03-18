@@ -1,6 +1,11 @@
-package com.WinSaving.api.domain;
+package com.WinSaving.api.domain.savingGoal;
 
+import com.WinSaving.api.domain.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Date;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.WinSaving.api.domain.enums;
+package com.WinSaving.api.domain.expense;
 
 public enum ExpenseType {
     MERCADO,

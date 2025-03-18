@@ -1,7 +1,12 @@
-package com.WinSaving.api.domain;
+package com.WinSaving.api.domain.expense;
 
-import com.WinSaving.api.domain.enums.ExpenseType;
+import com.WinSaving.api.domain.monthlyBudget.MonthlyBudget;
+import com.WinSaving.api.domain.expense.ExpenseType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
