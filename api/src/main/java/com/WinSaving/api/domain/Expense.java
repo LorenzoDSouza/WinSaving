@@ -9,6 +9,8 @@ import java.util.UUID;
 @Table(name = "expense")
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Expense {
 
     @Id

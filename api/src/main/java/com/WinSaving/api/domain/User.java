@@ -9,6 +9,8 @@ import java.util.UUID;
 @Entity
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id

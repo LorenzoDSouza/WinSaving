@@ -10,6 +10,8 @@ import java.util.UUID;
 @Table(name = "monthly_budget")
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MonthlyBudget {
 
     @Id
