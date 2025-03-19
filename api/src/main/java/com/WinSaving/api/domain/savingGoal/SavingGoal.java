@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "saving_goal")
-public class SavingGoal {//lombok recomenda a notacao @getter e @setter, substitui os metodos?
+public class SavingGoal {
 
     @Id
     @GeneratedValue
