@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Table(name = "user")
 @Entity
@@ -40,6 +41,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SavingGoal> goals;
 
+    public void setPassword(String rawPassword) {
+        this.password = new BCryptPasswordEncoder().encode(rawPassword);
+    }
 
     @Override
     public String toString() {
@@ -47,7 +51,6 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", monthlyBudget id=" + monthlyBudget.getId() +
                 '}';
