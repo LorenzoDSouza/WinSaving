@@ -15,7 +15,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "saving_goal")
+@Table(name = "saving_goals")
 public class SavingGoal {
 
     @Id
