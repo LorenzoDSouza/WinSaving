@@ -60,6 +60,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-parent</artifactId>
+			<version>10.20.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
