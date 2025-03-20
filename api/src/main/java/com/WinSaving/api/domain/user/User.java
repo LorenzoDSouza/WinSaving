@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@Table(name = "user")
+@Table(name = "users")
 @Entity
 @Setter
 @Getter
@@ -24,6 +24,7 @@ public class User {
     @GeneratedValue
     private UUID id;
 
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false, unique = true)
@@ -32,6 +33,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String phoneNumber;
 
     @OneToOne(cascade = CascadeType.ALL)
