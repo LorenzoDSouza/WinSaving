@@ -1,7 +1,6 @@
 package com.WinSaving.api.domain.expense;
 
 import com.WinSaving.api.domain.monthlyBudget.MonthlyBudget;
-import com.WinSaving.api.domain.expense.ExpenseType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "expense")
+@Table(name = "expenses")
 @Setter
 @Getter
 @NoArgsConstructor
@@ -19,7 +18,7 @@ import java.util.UUID;
 public class Expense {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private Double value;
 
@@ -27,10 +26,8 @@ public class Expense {
     private ExpenseType expenseType;
     private String description;
 
-
     @ManyToOne
-    @JoinColumn(name = "monthly_budget_id")
+    @JoinColumn(name = "monthly_budget_id", nullable = false)
     private MonthlyBudget monthlyBudget;
 
 }
-
