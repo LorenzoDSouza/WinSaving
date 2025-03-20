@@ -24,8 +24,13 @@ public class User {
     private UUID id;
 
     private String name;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
+
     private String phoneNumber;
 
     @OneToOne(cascade = CascadeType.ALL)
