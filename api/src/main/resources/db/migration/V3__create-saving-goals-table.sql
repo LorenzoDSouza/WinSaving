@@ -7,5 +7,5 @@ CREATE TABLE IF NOT EXISTS saving_goals (
     goal_amount NUMERIC(15, 2),
     total_amount NUMERIC(15, 2) DEFAULT 0.00,
     user_id UUID,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE NO ACTION
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
