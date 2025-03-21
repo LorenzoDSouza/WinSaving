@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
     monthly_budget_id UUID UNIQUE,
-    FOREIGN KEY (monthly_budget_id) REFERENCES monthly_budgets(id) ON DELETE RESTRICT
+    FOREIGN KEY (monthly_budget_id) REFERENCES monthly_budgets(id) ON DELETE CASCADE
 );
