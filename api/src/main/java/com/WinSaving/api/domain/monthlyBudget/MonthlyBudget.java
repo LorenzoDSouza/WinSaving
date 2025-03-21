@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "monthly_budgets")
@@ -24,10 +25,10 @@ public class MonthlyBudget {
     private UUID id;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private Double usedAmount = 0.00;
+    private BigDecimal usedAmount = BigDecimal.ZERO;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private Double originalAmount;
+    private BigDecimal originalAmount = BigDecimal.ZERO;
 
     private int payDay;
 
