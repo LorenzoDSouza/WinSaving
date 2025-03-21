@@ -7,6 +7,6 @@ CREATE TABLE IF NOT EXISTS expenses (
     )),
     description VARCHAR(255),
     monthly_budget_id UUID NOT NULL,
-    FOREIGN KEY (monthly_budget_id) REFERENCES monthly_budgets(id) ON DELETE RESTRICT
+    FOREIGN KEY (monthly_budget_id) REFERENCES monthly_budgets(id) ON DELETE NO ACTION
 );
 
