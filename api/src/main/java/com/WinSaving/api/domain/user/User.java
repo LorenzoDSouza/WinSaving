@@ -54,7 +54,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", first name ='" + firstName + '\'' +
+                ", last name ='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", monthlyBudget id=" + monthlyBudget.getId() +
