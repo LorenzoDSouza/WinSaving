@@ -17,6 +17,7 @@ public class UserService {
     private final Validator<String> phoneNumberValidator;
     private final Validator<String> firstNameValidator;
     private final Validator<String> lastNameValidator;
+    private final Validator<String> passwordValidator;
 
 
     @Autowired
@@ -26,6 +27,7 @@ public class UserService {
         phoneNumberValidator = new PhoneNumberValidator();
         firstNameValidator = new FirstNameValidator();
         lastNameValidator = new LastNameValidator();
+        passwordValidator = new PasswordValidator();
     }
 
     @Transactional
@@ -42,6 +44,10 @@ public class UserService {
         if (!lastNameValidator.validate(dto.lastName())){
             throw new RuntimeException("Invalid last name!");
         }
+        if (!passwordValidator.validate(dto.password())){
+            throw new RuntimeException("Invalid password!");
+        }
+
 
         return null;
     }
