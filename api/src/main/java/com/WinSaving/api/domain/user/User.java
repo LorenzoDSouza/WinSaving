@@ -25,7 +25,10 @@ public class User {
     private UUID id;
 
     @Column(nullable = false)
-    private String name;
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
 
     @Column(nullable = false, unique = true)
     private String email;
