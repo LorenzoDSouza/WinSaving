@@ -6,6 +6,7 @@ import com.WinSaving.api.domain.user.UserResponseDTO;
 import com.WinSaving.api.repositories.UserRepository;
 import com.WinSaving.api.util.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final Validator<String> emailValidator;
     private final Validator<String> phoneNumberValidator;
     private final Validator<String> firstNameValidator;
@@ -48,8 +50,22 @@ public class UserService {
             throw new RuntimeException("Invalid password!");
         }
 
+        User user = new User();
 
-        return null;
+        user.setEmail(dto.email());
+        user.setPhoneNumber(dto.phoneNumber());
+        user.setFirstName(dto.firstName());
+        user.setLastName(dto.lastName());
+        user.setPassword(passwordEncoder.encode(dto.password()));
+
+        //TODO: create the monthly budget to set to the user.
+
+        try {
+            user = userRepository.save(user);
+            return new UserResponseDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhoneNumber());
+        } catch (Exception e) {
+            throw new RuntimeException("Error while saving user: " + e.getMessage());
+        }
     }
 
 }
