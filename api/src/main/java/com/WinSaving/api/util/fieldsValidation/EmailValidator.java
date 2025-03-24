@@ -1,6 +1,4 @@
-package com.WinSaving.api.util.validation;
-
-import com.WinSaving.api.util.validation.Validator;
+package com.WinSaving.api.util.fieldsValidation;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
