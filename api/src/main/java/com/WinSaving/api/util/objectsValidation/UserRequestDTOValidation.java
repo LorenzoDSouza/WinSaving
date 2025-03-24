@@ -3,7 +3,9 @@ package com.WinSaving.api.util.objectsValidation;
 
 import com.WinSaving.api.domain.user.UserRequestDTO;
 import com.WinSaving.api.util.fieldsValidation.*;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserRequestDTOValidation {
     private final Validator<String> emailValidator;
     private final Validator<String> phoneNumberValidator;
@@ -19,23 +21,21 @@ public class UserRequestDTOValidation {
         passwordValidator = new PasswordValidator();
     }
 
-    public boolean validate(UserRequestDTO userRequestDTO) {
+    public void validate(UserRequestDTO userRequestDTO) {
         if (!emailValidator.validate(userRequestDTO.email())){
-            throw new RuntimeException("Invalid email address!");
+            throw new IllegalArgumentException("Invalid email address!");
         }
         if (!phoneNumberValidator.validate(userRequestDTO.phoneNumber())){
-            throw new RuntimeException("Invalid phone number!");
+            throw new IllegalArgumentException("Invalid phone number!");
         }
         if (!firstNameValidator.validate(userRequestDTO.firstName())){
-            throw new RuntimeException("Invalid first name!");
+            throw new IllegalArgumentException("Invalid first name!");
         }
         if (!lastNameValidator.validate(userRequestDTO.lastName())){
-            throw new RuntimeException("Invalid last name!");
+            throw new IllegalArgumentException("Invalid last name!");
         }
         if (!passwordValidator.validate(userRequestDTO.password())){
-            throw new RuntimeException("Invalid password!");
+            throw new IllegalArgumentException("Invalid password!");
         }
-
-        return true;
     }
 }
