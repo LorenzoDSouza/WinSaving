@@ -38,9 +38,7 @@ public class UserService {
             user.setLastName(dto.lastName());
             user.setPassword(passwordEncoder.encode(dto.password()));
 
-            // Cria um novo MonthlyBudget automaticamente
             user.setMonthlyBudget(new MonthlyBudget());
-
             user = userRepository.save(user);
 
             return new UserResponseDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhoneNumber());
