@@ -19,14 +19,14 @@ public class EmailValidator implements Validator<String> {
 
     @Override
     public boolean validate(String email) {
-        return !isEmptyEmail(email) && isValidPattern(email) && isUniqueEmail(email);
+        return isNotEmpty(email) && isValidPattern(email) && isUniqueEmail(email);
     }
 
-    public boolean isEmptyEmail(String email) {
+    public boolean isNotEmpty(String email) {
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("Email cannot be empty!");
         }
-        return false;
+        return true;
     }
 
     public boolean isValidPattern(String email) {
