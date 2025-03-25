@@ -52,7 +52,4 @@ public class UserService {
             throw new UserCreationException("Error while saving user: " + e.getMessage());
         }
     }
-
-
-
 }
