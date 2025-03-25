@@ -8,7 +8,7 @@ import com.WinSaving.api.exceptions.UserCreationException;
 import com.WinSaving.api.repositories.UserRepository;
 import com.WinSaving.api.util.objectsValidation.UserRequestDTOValidation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final UserRequestDTOValidation userRequestDTOValidation;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserRequestDTOValidation userRequestDTOValidation) {
+    public UserService(
+            UserRepository userRepository,
+            UserRequestDTOValidation userRequestDTOValidation,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        passwordEncoder = new BCryptPasswordEncoder();
+        this.passwordEncoder = passwordEncoder;
         this.userRequestDTOValidation = userRequestDTOValidation;
     }
 
