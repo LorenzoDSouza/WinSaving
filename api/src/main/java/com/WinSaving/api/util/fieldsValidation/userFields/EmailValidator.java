@@ -1,4 +1,4 @@
-package com.WinSaving.api.util.fieldsValidation;
+package com.WinSaving.api.util.fieldsValidation.userFields;
 
 import com.WinSaving.api.repositories.UserRepository;
 import org.springframework.stereotype.Component;
@@ -36,7 +36,7 @@ public class EmailValidator implements Validator<String> {
         return true;
     }
 
-    private boolean isUniqueEmail(String email) {
+    public boolean isUniqueEmail(String email) {
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email already registered!");
         }

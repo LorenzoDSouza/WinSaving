@@ -1,7 +1,7 @@
 package com.WinSaving.api.util.objectsValidation;
 
 import com.WinSaving.api.domain.user.UserRequestDTO;
-import com.WinSaving.api.util.fieldsValidation.*;
+import com.WinSaving.api.util.fieldsValidation.userFields.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.WinSaving.api.util.fieldsValidation;
+package com.WinSaving.api.util.fieldsValidation.userFields;
 
 import org.springframework.stereotype.Component;
 import java.util.regex.Pattern;
