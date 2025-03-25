@@ -29,7 +29,7 @@ public class UserService {
     @Transactional
     public UserResponseDTO createUser(UserRequestDTO dto) {
         try {
-            userRequestDTOValidation.validate(dto); // Valida antes de criar o usuário
+            userRequestDTOValidation.validate(dto);
 
             User user = new User();
             user.setEmail(dto.email());
