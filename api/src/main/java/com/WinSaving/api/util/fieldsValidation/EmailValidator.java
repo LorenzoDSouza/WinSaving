@@ -19,7 +19,7 @@ public class EmailValidator implements Validator<String> {
 
     @Override
     public boolean validate(String email) {
-        return isEmptyEmail(email) && isValidPattern(email) && isUniqueEmail(email);
+        return !isEmptyEmail(email) && isValidPattern(email) && isUniqueEmail(email);
     }
 
     public boolean isEmptyEmail(String email) {
