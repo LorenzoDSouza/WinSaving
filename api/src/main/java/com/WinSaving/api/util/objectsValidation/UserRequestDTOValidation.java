@@ -1,8 +1,8 @@
 package com.WinSaving.api.util.objectsValidation;
 
-
 import com.WinSaving.api.domain.user.UserRequestDTO;
 import com.WinSaving.api.util.fieldsValidation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,12 +13,17 @@ public class UserRequestDTOValidation {
     private final Validator<String> lastNameValidator;
     private final Validator<String> passwordValidator;
 
-    public UserRequestDTOValidation() {
-        emailValidator = new EmailValidator();
-        phoneNumberValidator = new PhoneNumberValidator();
-        firstNameValidator = new FirstNameValidator();
-        lastNameValidator = new LastNameValidator();
-        passwordValidator = new PasswordValidator();
+    @Autowired
+    public UserRequestDTOValidation(EmailValidator emailValidator,
+                                    PhoneNumberValidator phoneNumberValidator,
+                                    FirstNameValidator firstNameValidator,
+                                    LastNameValidator lastNameValidator,
+                                    PasswordValidator passwordValidator) {
+        this.emailValidator = emailValidator;
+        this.phoneNumberValidator = phoneNumberValidator;
+        this.firstNameValidator = firstNameValidator;
+        this.lastNameValidator = lastNameValidator;
+        this.passwordValidator = passwordValidator;
     }
 
     public void validate(UserRequestDTO userRequestDTO) {
