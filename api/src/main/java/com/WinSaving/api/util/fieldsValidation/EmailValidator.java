@@ -1,10 +1,8 @@
 package com.WinSaving.api.util.fieldsValidation;
 
 import com.WinSaving.api.repositories.UserRepository;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
@@ -21,7 +19,14 @@ public class EmailValidator implements Validator<String> {
 
     @Override
     public boolean validate(String email) {
-        return isValidPattern(email) && isUniqueEmail(email);
+        return isEmptyEmail(email) && isValidPattern(email) && isUniqueEmail(email);
+    }
+
+    public boolean isEmptyEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be empty!");
+        }
+        return true;
     }
 
     public boolean isValidPattern(String email) {
@@ -33,7 +38,7 @@ public class EmailValidator implements Validator<String> {
 
     private boolean isUniqueEmail(String email) {
         if (userRepository.existsByEmail(email)) {
-            throw new DataIntegrityViolationException("Email already registered!");
+            throw new IllegalArgumentException("Email already registered!");
         }
         return true;
     }
