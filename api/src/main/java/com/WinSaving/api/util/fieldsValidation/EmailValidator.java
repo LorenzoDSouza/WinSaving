@@ -26,7 +26,7 @@ public class EmailValidator implements Validator<String> {
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("Email cannot be empty!");
         }
-        return true;
+        return false;
     }
 
     public boolean isValidPattern(String email) {
