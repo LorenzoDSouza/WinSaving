@@ -17,14 +17,14 @@ public class PhoneNumberValidator implements Validator<String> {
 
     @Override
     public boolean validate(String phoneNumber){
-        return !isEmpty(phoneNumber) && isValidPattern(phoneNumber) && isUnique(phoneNumber);
+        return isNotEmpty(phoneNumber) && isValidPattern(phoneNumber) && isUnique(phoneNumber);
     }
 
-    public boolean isEmpty(String phoneNumber){
+    public boolean isNotEmpty(String phoneNumber){
         if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
             throw new IllegalArgumentException("Phone Number cannot be empty!");
         }
-        return false;
+        return true;
     }
 
     public boolean isValidPattern(String phoneNumber){
