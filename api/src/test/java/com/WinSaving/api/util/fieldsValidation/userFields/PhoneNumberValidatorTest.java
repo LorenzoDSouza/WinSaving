@@ -72,13 +72,13 @@ public class PhoneNumberValidatorTest {
         assertTrue(phoneNumberValidator.isValidPattern("+55 ( 51 ) 99175 7318"));
     }
 
-//    @Test
-//    public void testIsValidPattern_shouldThrowException_whenPhoneNumberIsInvalid_withoutCountryCode_withDDD(){
-//        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-//            phoneNumberValidator.isNotEmpty(null);
-//        });
-//        assertEquals(phoneNumberValidator.isValidPattern("(51) 99175-7318"));
-//    }//this one should return exception, cause the country code is missing
+    @Test
+    public void testIsValidPattern_shouldThrowException_whenPhoneNumberIsInvalid_withoutCountryCode_withDDD(){
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            phoneNumberValidator.isValidPattern("(51) 99175-7318");
+        });
+        assertEquals("The pattern of the phone number is invalid!", thrown.getMessage());
+    }
 
 
 
