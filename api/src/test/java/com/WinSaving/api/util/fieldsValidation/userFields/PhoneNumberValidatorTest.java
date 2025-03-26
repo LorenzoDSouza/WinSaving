@@ -73,12 +73,44 @@ public class PhoneNumberValidatorTest {
     }
 
     @Test
+    public void testIsValidPattern_shouldReturnTrue_whenPhoneNumberIsValid_completeNumber_withSpacedAfterDDDAndCCTogether(){
+        assertTrue(phoneNumberValidator.isValidPattern("+5551 99175 7318"));
+    }
+
+    @Test
     public void testIsValidPattern_shouldThrowException_whenPhoneNumberIsInvalid_withoutCountryCode_withDDD(){
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             phoneNumberValidator.isValidPattern("(51) 99175-7318");
         });
         assertEquals("The pattern of the phone number is invalid!", thrown.getMessage());
     }
+
+    @Test
+    public void testIsValidPattern_shouldThrowException_whenPhoneNumberIsInvalid_withoutCountryCode_withoutDDD(){
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            phoneNumberValidator.isValidPattern("99175-7318");
+        });
+        assertEquals("The pattern of the phone number is invalid!", thrown.getMessage());
+    }
+
+    @Test
+    public void testIsValidPattern_shouldThrowException_whenPhoneNumberIsInvalid_withCountryCode_withoutDDD(){
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            phoneNumberValidator.isValidPattern("+55 99175-7318");
+        });
+        assertEquals("The pattern of the phone number is invalid!", thrown.getMessage());
+    }
+
+    @Test
+    public void testIsValidPattern_shouldThrowException_whenPhoneNumberIsInvalid_withOnly3DigitsInTheSecondPart(){
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            phoneNumberValidator.isValidPattern("+55 55 99175-731");
+        });
+        assertEquals("The pattern of the phone number is invalid!", thrown.getMessage());
+    }
+
+
+
 
 
 
