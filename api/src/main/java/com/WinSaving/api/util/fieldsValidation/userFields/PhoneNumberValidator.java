@@ -5,8 +5,11 @@ import java.util.regex.Pattern;
 
 @Component
 public class PhoneNumberValidator implements Validator<String> {
+    //TODO: at first, only brazilian phone numbers will be accepted.
+
+
     private static final Pattern phoneNumberPattern =  Pattern.compile(
-           "\\+?\\d{1,3}\\s?(\\(\\s?\\d{2}\\s?\\)|\\d{2})\\s?9\\d{4}[\\s-]?\\d{4}");
+           "^(\\+55|55)\\s?(\\(\\s?\\d{2}\\s?\\)|\\d{2})\\s?9\\d{4}[\\s-]?\\d{4}$");
 
 
     @Override
