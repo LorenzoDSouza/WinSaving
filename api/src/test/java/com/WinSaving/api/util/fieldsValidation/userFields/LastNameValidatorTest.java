@@ -18,22 +18,22 @@ public class LastNameValidatorTest {
 
     @Test
     public void testIsValid_shouldReturnTrue_whenLastNameIsValid() {
-        assertTrue(lastNameValidator.isValidPattern("Smith"));
-        assertTrue(lastNameValidator.isValidPattern("D'Largy"));
-        assertTrue(lastNameValidator.isValidPattern("Doe-Smith"));
-        assertTrue(lastNameValidator.isValidPattern("Doe Smith"));
-        assertTrue(lastNameValidator.isValidPattern("Sausage-Hausen"));
-        assertTrue(lastNameValidator.isValidPattern("d'Arras"));
-        assertTrue(lastNameValidator.isValidPattern("Luther King"));
-        assertTrue(lastNameValidator.isValidPattern("Wong"));
-        assertTrue(lastNameValidator.isValidPattern("Chang"));
-        assertTrue(lastNameValidator.isValidPattern("Bara"));
+        assertTrue(lastNameValidator.validate("Smith"));
+        assertTrue(lastNameValidator.validate("D'Largy"));
+        assertTrue(lastNameValidator.validate("Doe-Smith"));
+        assertTrue(lastNameValidator.validate("Doe Smith"));
+        assertTrue(lastNameValidator.validate("Sausage-Hausen"));
+        assertTrue(lastNameValidator.validate("d'Arras"));
+        assertTrue(lastNameValidator.validate("Luther King"));
+        assertTrue(lastNameValidator.validate("Wong"));
+        assertTrue(lastNameValidator.validate("Chang"));
+        assertTrue(lastNameValidator.validate("Bara"));
     }
 
     @Test
     public void testIsValid_shouldThrowException_whenLastNameIsInvalid_onlyNumbers() {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            lastNameValidator.isValidPattern("123");
+            lastNameValidator.validate("123");
         });
         assertEquals(thrown.getMessage(), "Last Name can only contain letters, spaces, apostrophes, and hyphens!");
     }
@@ -41,7 +41,7 @@ public class LastNameValidatorTest {
     @Test
     public void testIsValid_shouldThrowException_whenLastNameIsInvalid_lettersAndNumbers() {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            lastNameValidator.isValidPattern("Eu1");
+            lastNameValidator.validate("Eu1");
         });
         assertEquals(thrown.getMessage(), "Last Name can only contain letters, spaces, apostrophes, and hyphens!");
     }
@@ -49,7 +49,7 @@ public class LastNameValidatorTest {
     @Test
     public void testIsValid_shouldThrowException_whenLastNameIsInvalid_lettersAndSymbols() {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            lastNameValidator.isValidPattern("Eu$");
+            lastNameValidator.validate("Eu$");
         });
         assertEquals(thrown.getMessage(), "Last Name can only contain letters, spaces, apostrophes, and hyphens!");
     }
@@ -57,7 +57,7 @@ public class LastNameValidatorTest {
     @Test
     public void testIsNotEmpty_shouldThrowException_whenLastNameIsEmpty() {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            lastNameValidator.isNotEmpty("");
+            lastNameValidator.validate("");
         });
         assertEquals(thrown.getMessage(), "Last Name cannot be empty!");
     }
@@ -65,7 +65,7 @@ public class LastNameValidatorTest {
     @Test
     public void testIsNotEmpty_shouldThrowException_whenLastNameIsNull() {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            lastNameValidator.isNotEmpty(null);
+            lastNameValidator.validate(null);
         });
         assertEquals(thrown.getMessage(), "Last Name cannot be empty!");
     }
