@@ -11,7 +11,7 @@ public class LastNameValidator implements Validator<String> {
 
     @Override
     public boolean validate(String lastName) {
-        return !isNotEmpty(lastName) && isValidPattern(lastName);
+        return isNotEmpty(lastName) && isValidPattern(lastName);
     }
 
     public boolean isNotEmpty(String lastName) {
