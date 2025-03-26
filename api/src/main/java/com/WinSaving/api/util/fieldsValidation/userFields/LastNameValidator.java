@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 @Component
 public class LastNameValidator implements Validator<String> {
     public static final Pattern lastNamePattern =
-            Pattern.compile("^[A-Za-zÀ-ÿ]+(?:[ '-]?[A-Za-zÀ-ÿ]+)*(?:[ '-]de[A-Za-zÀ-ÿ]+)?$");
+            Pattern.compile("^[A-Za-zÀ-ÿ]+(?:[' -][A-Za-zÀ-ÿ]+)*$");
 
 
     @Override
