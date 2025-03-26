@@ -1,11 +1,10 @@
 package com.WinSaving.api.util.fieldsValidation.userFields;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class LastNameValidatorTest {
@@ -31,6 +30,45 @@ public class LastNameValidatorTest {
         assertTrue(lastNameValidator.isValidPattern("Bara"));
     }
 
+    @Test
+    public void testIsValid_shouldThrowException_whenLastNameIsInvalid_onlyNumbers() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            lastNameValidator.isValidPattern("123");
+        });
+        assertEquals(thrown.getMessage(), "Last Name can only contain letters, spaces, apostrophes, and hyphens!");
+    }
+
+    @Test
+    public void testIsValid_shouldThrowException_whenLastNameIsInvalid_lettersAndNumbers() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            lastNameValidator.isValidPattern("Eu1");
+        });
+        assertEquals(thrown.getMessage(), "Last Name can only contain letters, spaces, apostrophes, and hyphens!");
+    }
+
+    @Test
+    public void testIsValid_shouldThrowException_whenLastNameIsInvalid_lettersAndSymbols() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            lastNameValidator.isValidPattern("Eu$");
+        });
+        assertEquals(thrown.getMessage(), "Last Name can only contain letters, spaces, apostrophes, and hyphens!");
+    }
+
+    @Test
+    public void testIsNotEmpty_shouldThrowException_whenLastNameIsEmpty() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            lastNameValidator.isNotEmpty("");
+        });
+        assertEquals(thrown.getMessage(), "Last Name cannot be empty!");
+    }
+
+    @Test
+    public void testIsNotEmpty_shouldThrowException_whenLastNameIsNull() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            lastNameValidator.isNotEmpty(null);
+        });
+        assertEquals(thrown.getMessage(), "Last Name cannot be empty!");
+    }
 
 
 
