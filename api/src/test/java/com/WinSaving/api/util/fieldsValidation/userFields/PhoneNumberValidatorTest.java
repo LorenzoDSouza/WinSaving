@@ -82,7 +82,8 @@ public class PhoneNumberValidatorTest {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             phoneNumberValidator.isValidPattern("(51) 99175-7318");
         });
-        assertEquals("The pattern of the phone number is invalid!", thrown.getMessage());
+        assertEquals("The pattern of the phone number is invalid! Rather ir's not a brazilian number or something is missing (remember to put the DDD and the Country Code).",
+                thrown.getMessage());
     }
 
     @Test
@@ -90,7 +91,8 @@ public class PhoneNumberValidatorTest {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             phoneNumberValidator.isValidPattern("99175-7318");
         });
-        assertEquals("The pattern of the phone number is invalid!", thrown.getMessage());
+        assertEquals("The pattern of the phone number is invalid! Rather ir's not a brazilian number or something is missing (remember to put the DDD and the Country Code).",
+                thrown.getMessage());
     }
 
     @Test
@@ -98,7 +100,8 @@ public class PhoneNumberValidatorTest {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             phoneNumberValidator.isValidPattern("+55 99175-7318");
         });
-        assertEquals("The pattern of the phone number is invalid!", thrown.getMessage());
+        assertEquals("The pattern of the phone number is invalid! Rather ir's not a brazilian number or something is missing (remember to put the DDD and the Country Code).",
+                thrown.getMessage());
     }
 
     @Test
@@ -106,9 +109,11 @@ public class PhoneNumberValidatorTest {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             phoneNumberValidator.isValidPattern("+55 55 99175-731");
         });
-        assertEquals("The pattern of the phone number is invalid!", thrown.getMessage());
+        assertEquals("The pattern of the phone number is invalid! Rather ir's not a brazilian number or something is missing (remember to put the DDD and the Country Code).",
+                thrown.getMessage());
     }
 
+    //TODO: the tests above this checkpoint are for brazilian numbers only
 
 
 
