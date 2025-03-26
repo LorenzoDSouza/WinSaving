@@ -37,7 +37,6 @@ public class UserService {
             userRequestDTOValidation.validate(dto);
 
             User user = new User();
-            user.setId(UUID.randomUUID());
             user.setEmail(dto.email());
             user.setPhoneNumber(dto.phoneNumber());
             user.setFirstName(dto.firstName());
