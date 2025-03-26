@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 @Component
 public class PhoneNumberValidator implements Validator<String> {
     private static final Pattern phoneNumberPattern =  Pattern.compile(
-           "\\(?\\d{2}\\)?\\s?9\\d{4}-?\\d{4}|\\d{10}");
+           "\\+?\\d{1,3}\\s?\\(\\s?\\d{2}\\s?\\)\\s?9\\d{4}[\\s-]?\\d{4}");
 
 
     @Override
