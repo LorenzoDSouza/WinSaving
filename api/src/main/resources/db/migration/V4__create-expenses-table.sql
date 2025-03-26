@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS expenses (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    value DOUBLE PRECISION NOT NULL,
+    value NUMERIC(10,2) NOT NULL,
     expense_type VARCHAR(20) NOT NULL CHECK (expense_type IN (
         'MERCADO', 'ALIMENTACAO', 'TRANSPORTE', 'HABITACAO', 'SAUDE',
         'EDUCACAO', 'LAZER', 'COMPRAS', 'IMPOSTOS', 'OUTROS'
