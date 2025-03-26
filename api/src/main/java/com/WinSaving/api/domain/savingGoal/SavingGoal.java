@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.UUID;
 
@@ -19,21 +20,28 @@ import java.util.UUID;
 public class SavingGoal {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO) 
     private UUID id;
 
+    @Column(nullable = false, length = 255)
     private String name;
+
+    @Column(length = 255)
     private String purpose;
 
+    @Column(length = 255)
     private String depositPlace;
 
     private Date dueDate;
 
-    private Double goalAmount;
-    private Double totalAmount;
+    @Column(precision = 15, scale = 2)
+    private BigDecimal goalAmount;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @Column(precision = 15, scale = 2, nullable = false)
+    private BigDecimal totalAmount = BigDecimal.ZERO;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)) // Mantém compatibilidade com SQL
     private User user;
-
 }
+

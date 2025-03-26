@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -18,12 +19,16 @@ import java.util.UUID;
 public class Expense {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private Double value;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal value;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ExpenseType expenseType;
+
     private String description;
 
     @ManyToOne
