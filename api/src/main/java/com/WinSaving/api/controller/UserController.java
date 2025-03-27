@@ -6,10 +6,10 @@ import com.WinSaving.api.domain.user.UserResponseDTO;
 import com.WinSaving.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
@@ -23,4 +23,11 @@ public class UserController {
         UserResponseDTO user = this.userService.createUser(body);
         return ResponseEntity.ok(user);
     }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponseDTO> getById(@PathVariable UUID userId) {
+        UserResponseDTO user = this.userService.getUserById(userId);
+        return ResponseEntity.ok(user);
+    }
 }
+
