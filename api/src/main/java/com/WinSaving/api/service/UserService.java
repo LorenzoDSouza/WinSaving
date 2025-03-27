@@ -5,9 +5,11 @@ import com.WinSaving.api.domain.user.User;
 import com.WinSaving.api.domain.user.UserRequestDTO;
 import com.WinSaving.api.domain.user.UserResponseDTO;
 import com.WinSaving.api.exceptions.UserCreationException;
+import com.WinSaving.api.exceptions.UserNotFoundException;
 import com.WinSaving.api.repositories.UserRepository;
 import com.WinSaving.api.util.objectsValidation.UserRequestDTOValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,4 +56,16 @@ public class UserService {
             throw new UserCreationException("Error while saving user: " + e.getMessage());
         }
     }
+
+
+    @Transactional(readOnly = true)
+    public UserResponseDTO getUserById(UUID id) {
+        User user = userRepository.findById(id).
+                orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+
+        return new UserResponseDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhoneNumber());
+    }
+
+
+
 }
