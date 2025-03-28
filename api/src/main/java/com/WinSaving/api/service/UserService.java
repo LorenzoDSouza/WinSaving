@@ -80,5 +80,13 @@ public class UserService {
         return new UserResponseDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhoneNumber());
     }
 
+    @Transactional
+    public void deleteUser(UUID userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException("User not found with id: " + userId);
+        }
+        userRepository.deleteById(userId);
+    }
+
 
 }
