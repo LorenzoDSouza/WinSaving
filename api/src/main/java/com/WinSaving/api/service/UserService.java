@@ -1,11 +1,14 @@
 package com.WinSaving.api.service;
 
 import com.WinSaving.api.domain.monthlyBudget.MonthlyBudget;
+import com.WinSaving.api.domain.savingGoal.SavingGoal;
 import com.WinSaving.api.domain.user.User;
 import com.WinSaving.api.domain.user.UserRequestDTO;
 import com.WinSaving.api.domain.user.UserResponseDTO;
 import com.WinSaving.api.exceptions.UserCreationException;
 import com.WinSaving.api.exceptions.UserNotFoundException;
+import com.WinSaving.api.repositories.MonthlyBudgetRepository;
+import com.WinSaving.api.repositories.SavingGoalRepository;
 import com.WinSaving.api.repositories.UserRepository;
 import com.WinSaving.api.util.objectsValidation.UserRequestDTOValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +25,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRequestDTOValidation userRequestDTOValidation;
+    private final SavingGoalRepository savingGoalRepository;
+    private final MonthlyBudgetRepository monthlyBudgetRepository;
 
     @Autowired
     public UserService(
             UserRepository userRepository,
             UserRequestDTOValidation userRequestDTOValidation,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder, SavingGoalRepository savingGoalRepository, MonthlyBudgetRepository monthlyBudgetRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRequestDTOValidation = userRequestDTOValidation;
+        this.savingGoalRepository = savingGoalRepository;
+        this.monthlyBudgetRepository = monthlyBudgetRepository;
     }
 
     @Transactional
@@ -82,9 +89,12 @@ public class UserService {
 
     @Transactional
     public void deleteUser(UUID userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException("User not found with id: " + userId);
-        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+        savingGoalRepository.deleteAll(user.getGoals());
+        monthlyBudgetRepository.deleteById(user.getMonthlyBudget().getId());
+
         userRepository.deleteById(userId);
     }
 
