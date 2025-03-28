@@ -29,5 +29,11 @@ public class UserController {
         UserResponseDTO user = this.userService.getUserById(userId);
         return ResponseEntity.ok(user);
     }
+
+    @PutMapping("/{usedId}")
+    public ResponseEntity<UserResponseDTO> update(@PathVariable UUID userId, @RequestBody UserRequestDTO body) {
+        UserResponseDTO user = this.userService.updateUser(userId, body);
+        return ResponseEntity.ok(user);
+    }
 }
 
