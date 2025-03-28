@@ -57,15 +57,28 @@ public class UserService {
         }
     }
 
-
     @Transactional(readOnly = true)
     public UserResponseDTO getUserById(UUID id) {
         User user = userRepository.findById(id).
                 orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
-
+        System.out.println("User found with id: " + id);
         return new UserResponseDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhoneNumber());
     }
 
+    @Transactional
+    public UserResponseDTO updateUser(UUID userId, UserRequestDTO dto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+        if (dto.email() != null) user.setEmail(dto.email());
+        if (dto.phoneNumber() != null) user.setPhoneNumber(dto.phoneNumber());
+        if (dto.firstName() != null) user.setFirstName(dto.firstName());
+        if (dto.lastName() != null) user.setLastName(dto.lastName());
+        if (dto.password() != null) user.setPassword(passwordEncoder.encode(dto.password()));
+
+        user = userRepository.save(user);
+        return new UserResponseDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhoneNumber());
+    }
 
 
 }
