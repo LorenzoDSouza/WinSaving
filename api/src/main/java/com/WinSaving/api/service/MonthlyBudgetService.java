@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -48,29 +49,38 @@ public class MonthlyBudgetService {
 
 
     @Transactional
-    public MonthlyBudget reneUsedAmount(UUID monthlyBudgetId) { //call this by a useEffect in the frontend.
+    public MonthlyBudget renewUsedAmount(UUID monthlyBudgetId) { //call this by a useEffect in the frontend.
         MonthlyBudget budget = monthlyBudgetRepository.findById(monthlyBudgetId)
                 .orElseThrow(() -> new MonthlyBudgetNotFoundException("Monthly budget not found with id: " + monthlyBudgetId));
 
         Calendar calendar = Calendar.getInstance();
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
-        BigDecimal remainderMoney = budget.getOriginalAmount().subtract(budget.getUsedAmount());
-
         if(budget.getPayDay() == dayOfMonth) {
+            BigDecimal remainderMoney = budget.getOriginalAmount().subtract(budget.getUsedAmount());
+            budget.setOriginalAmount(budget.getOriginalAmount().add(remainderMoney));
+
             budget.setUsedAmount(BigDecimal.ZERO);
+
+            Date today = new Date(System.currentTimeMillis());
+            budget.setLastReset(today);
+
+            System.out.println("Used amount updated! (payday!!!)");
+        } else {
+            System.out.println("Used amount wasn't updated...");
         }
-        budget.setOriginalAmount(budget.getOriginalAmount().add(remainderMoney));
 
         return monthlyBudgetRepository.save(budget);
     }
 
     @Transactional
-    public MonthlyBudget setUsedAmount(UUID monthlyBudgetId, BigDecimal usedAmount) {
+    public MonthlyBudget updateUsedAmount(UUID monthlyBudgetId, BigDecimal usedAmount) {
         MonthlyBudget budget = monthlyBudgetRepository.findById(monthlyBudgetId)
                 .orElseThrow(() -> new MonthlyBudgetNotFoundException("Monthly budget not found with id: " + monthlyBudgetId));
 
         budget.setUsedAmount(usedAmount);
         return monthlyBudgetRepository.save(budget);
     }
+
+
 }
