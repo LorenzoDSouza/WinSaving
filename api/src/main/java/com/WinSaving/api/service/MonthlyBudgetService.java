@@ -42,25 +42,35 @@ public class MonthlyBudgetService {
 
     @Transactional
     public MonthlyBudget getMonthlyBudget(UUID monthlyBudgetId) {
-        MonthlyBudget budget = monthlyBudgetRepository.findById(monthlyBudgetId)
+        return monthlyBudgetRepository.findById(monthlyBudgetId)
                 .orElseThrow(() -> new MonthlyBudgetNotFoundException("Monthly budget not found with id: " + monthlyBudgetId));
-
-        return budget;
     }
 
 
     @Transactional
-    public MonthlyBudget renewOriginalAmount(UUID monthlyBudgetId) { //call this by a useEffect.
+    public MonthlyBudget reneUsedAmount(UUID monthlyBudgetId) { //call this by a useEffect in the frontend.
         MonthlyBudget budget = monthlyBudgetRepository.findById(monthlyBudgetId)
                 .orElseThrow(() -> new MonthlyBudgetNotFoundException("Monthly budget not found with id: " + monthlyBudgetId));
 
         Calendar calendar = Calendar.getInstance();
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
+        BigDecimal remainderMoney = budget.getOriginalAmount().subtract(budget.getUsedAmount());
+
         if(budget.getPayDay() == dayOfMonth) {
             budget.setUsedAmount(BigDecimal.ZERO);
         }
+        budget.setOriginalAmount(budget.getOriginalAmount().add(remainderMoney));
 
+        return monthlyBudgetRepository.save(budget);
+    }
+
+    @Transactional
+    public MonthlyBudget setUsedAmount(UUID monthlyBudgetId, BigDecimal usedAmount) {
+        MonthlyBudget budget = monthlyBudgetRepository.findById(monthlyBudgetId)
+                .orElseThrow(() -> new MonthlyBudgetNotFoundException("Monthly budget not found with id: " + monthlyBudgetId));
+
+        budget.setUsedAmount(usedAmount);
         return monthlyBudgetRepository.save(budget);
     }
 }
