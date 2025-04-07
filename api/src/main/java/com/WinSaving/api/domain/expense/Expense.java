@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.UUID;
 
 @Entity
@@ -34,5 +35,8 @@ public class Expense {
     @ManyToOne
     @JoinColumn(name = "monthly_budget_id", nullable = false)
     private MonthlyBudget monthlyBudget;
+
+    @Column(name = "date", nullable = false)
+    private Date date;
 
 }
