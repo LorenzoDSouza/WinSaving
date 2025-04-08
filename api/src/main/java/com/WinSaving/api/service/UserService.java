@@ -7,9 +7,11 @@ import com.WinSaving.api.domain.user.UserRequestDTO;
 import com.WinSaving.api.domain.user.UserResponseDTO;
 import com.WinSaving.api.exceptions.UserCreationException;
 import com.WinSaving.api.exceptions.UserNotFoundException;
+import com.WinSaving.api.exceptions.UserUpdateException;
 import com.WinSaving.api.repositories.MonthlyBudgetRepository;
 import com.WinSaving.api.repositories.SavingGoalRepository;
 import com.WinSaving.api.repositories.UserRepository;
+import com.WinSaving.api.util.fieldsValidation.userFields.FirstNameValidator;
 import com.WinSaving.api.util.objectsValidation.UserRequestDTOValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,6 +29,7 @@ public class UserService {
     private final UserRequestDTOValidation userRequestDTOValidation;
     private final SavingGoalRepository savingGoalRepository;
     private final MonthlyBudgetRepository monthlyBudgetRepository;
+    private final FirstNameValidator firstNameValidator;
 
     @Autowired
     public UserService(
@@ -38,6 +41,7 @@ public class UserService {
         this.userRequestDTOValidation = userRequestDTOValidation;
         this.savingGoalRepository = savingGoalRepository;
         this.monthlyBudgetRepository = monthlyBudgetRepository;
+        this.firstNameValidator = new FirstNameValidator();
     }
 
     @Transactional
@@ -85,6 +89,19 @@ public class UserService {
 
         user = userRepository.save(user);
         return new UserResponseDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhoneNumber());
+    }
+
+    @Transactional UserResponseDTO updateFirstName(UUID userId, String firstName) {
+        if(!firstNameValidator.validate(firstName)){
+            throw new UserUpdateException("Invalid first name!");
+        }
+        if(!userRepository.existsById(userId)){
+            throw new UserNotFoundException("User not found with id: " + userId);
+        }
+
+        UserRequestDTO dto = new UserRequestDTO(firstName, null, null, null, null);
+
+        return updateUser(userId, dto);
     }
 
     @Transactional
