@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -127,6 +128,11 @@ public class UserService {
     @Transactional UserResponseDTO updateEmail(UUID userId, String email) {
         if(!emailValidator.validate(email)){
             throw new UserUpdateException("Invalid email!");
+        }
+
+        Optional<User> existingUser = userRepository.findByEmail(email);
+        if (existingUser.isPresent() && !existingUser.get().getId().equals(userId)) {
+            throw new UserUpdateException("Email is already in use by another user.");
         }
 
         UserRequestDTO dto = new UserRequestDTO(null, null, email, null, null);
