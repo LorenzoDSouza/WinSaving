@@ -95,9 +95,6 @@ public class UserService {
         if(!firstNameValidator.validate(firstName)){
             throw new UserUpdateException("Invalid first name!");
         }
-        if(!userRepository.existsById(userId)){
-            throw new UserNotFoundException("User not found with id: " + userId);
-        }
 
         UserRequestDTO dto = new UserRequestDTO(firstName, null, null, null, null);
 
