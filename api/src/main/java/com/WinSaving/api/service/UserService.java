@@ -11,10 +11,7 @@ import com.WinSaving.api.exceptions.UserUpdateException;
 import com.WinSaving.api.repositories.MonthlyBudgetRepository;
 import com.WinSaving.api.repositories.SavingGoalRepository;
 import com.WinSaving.api.repositories.UserRepository;
-import com.WinSaving.api.util.fieldsValidation.userFields.EmailValidator;
-import com.WinSaving.api.util.fieldsValidation.userFields.FirstNameValidator;
-import com.WinSaving.api.util.fieldsValidation.userFields.LastNameValidator;
-import com.WinSaving.api.util.fieldsValidation.userFields.PasswordValidator;
+import com.WinSaving.api.util.fieldsValidation.userFields.*;
 import com.WinSaving.api.util.objectsValidation.UserRequestDTOValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,6 +34,7 @@ public class UserService {
     private final LastNameValidator lastNameValidator;
     private final EmailValidator emailValidator;
     private final PasswordValidator passwordValidator;
+    private final PhoneNumberValidator phoneNumberValidator;
 
     @Autowired
     public UserService(
@@ -46,7 +44,7 @@ public class UserService {
             SavingGoalRepository savingGoalRepository,
             MonthlyBudgetRepository monthlyBudgetRepository,
             FirstNameValidator firstNameValidator,
-            LastNameValidator lastNameValidator, EmailValidator emailValidator, PasswordValidator passwordValidator) {
+            LastNameValidator lastNameValidator, EmailValidator emailValidator, PasswordValidator passwordValidator, PhoneNumberValidator phoneNumberValidator) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRequestDTOValidation = userRequestDTOValidation;
@@ -56,6 +54,7 @@ public class UserService {
         this.lastNameValidator = lastNameValidator;
         this.emailValidator = emailValidator;
         this.passwordValidator = passwordValidator;
+        this.phoneNumberValidator = phoneNumberValidator;
     }
 
     @Transactional
@@ -105,7 +104,8 @@ public class UserService {
         return new UserResponseDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhoneNumber());
     }
 
-    @Transactional UserResponseDTO updateFirstName(UUID userId, String firstName) {
+    @Transactional
+    public UserResponseDTO updateFirstName(UUID userId, String firstName) {
         if(!firstNameValidator.validate(firstName)){
             throw new UserUpdateException("Invalid first name!");
         }
@@ -115,7 +115,8 @@ public class UserService {
         return updateUser(userId, dto);
     }
 
-    @Transactional UserResponseDTO updateLastName(UUID userId, String lastName) {
+    @Transactional
+    public UserResponseDTO updateLastName(UUID userId, String lastName) {
         if(!lastNameValidator.validate(lastName)){
             throw new UserUpdateException("Invalid last name!");
         }
@@ -125,7 +126,8 @@ public class UserService {
         return updateUser(userId, dto);
     }
 
-    @Transactional UserResponseDTO updateEmail(UUID userId, String email) {
+    @Transactional
+    public UserResponseDTO updateEmail(UUID userId, String email) {
         if(!emailValidator.validate(email)){
             throw new UserUpdateException("Invalid email!");
         }
@@ -140,7 +142,8 @@ public class UserService {
         return updateUser(userId, dto);
     }
 
-    @Transactional UserResponseDTO updatePassword(UUID userId, String oldPassword, String newPassword) {
+    @Transactional
+    public UserResponseDTO updatePassword(UUID userId, String oldPassword, String newPassword) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
@@ -156,6 +159,25 @@ public class UserService {
 
         return updateUser(userId, dto);
     }
+
+    @Transactional
+    public UserResponseDTO updatePhoneNumber(UUID userId, String newPhoneNumber) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+        if (newPhoneNumber.equals(user.getPhoneNumber())) {
+            throw new UserUpdateException("Old phone number is the same as the new phone number!.");
+        }
+
+        if (!phoneNumberValidator.validate(newPhoneNumber)) {
+            throw new UserUpdateException("New phone number is invalid.");
+        }
+
+        UserRequestDTO dto = new UserRequestDTO(null, null, null, null, newPhoneNumber);
+
+        return updateUser(userId, dto);
+    }
+
 
     @Transactional
     public void deleteUser(UUID userId) {
