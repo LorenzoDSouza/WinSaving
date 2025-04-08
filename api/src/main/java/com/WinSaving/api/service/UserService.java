@@ -14,6 +14,7 @@ import com.WinSaving.api.repositories.UserRepository;
 import com.WinSaving.api.util.fieldsValidation.userFields.EmailValidator;
 import com.WinSaving.api.util.fieldsValidation.userFields.FirstNameValidator;
 import com.WinSaving.api.util.fieldsValidation.userFields.LastNameValidator;
+import com.WinSaving.api.util.fieldsValidation.userFields.PasswordValidator;
 import com.WinSaving.api.util.objectsValidation.UserRequestDTOValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,6 +35,7 @@ public class UserService {
     private final FirstNameValidator firstNameValidator;
     private final LastNameValidator lastNameValidator;
     private final EmailValidator emailValidator;
+    private final PasswordValidator passwordValidator;
 
     @Autowired
     public UserService(
@@ -43,7 +45,7 @@ public class UserService {
             SavingGoalRepository savingGoalRepository,
             MonthlyBudgetRepository monthlyBudgetRepository,
             FirstNameValidator firstNameValidator,
-            LastNameValidator lastNameValidator, EmailValidator emailValidator) {
+            LastNameValidator lastNameValidator, EmailValidator emailValidator, PasswordValidator passwordValidator) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRequestDTOValidation = userRequestDTOValidation;
@@ -52,6 +54,7 @@ public class UserService {
         this.firstNameValidator = firstNameValidator;
         this.lastNameValidator = lastNameValidator;
         this.emailValidator = emailValidator;
+        this.passwordValidator = passwordValidator;
     }
 
     @Transactional
@@ -127,6 +130,23 @@ public class UserService {
         }
 
         UserRequestDTO dto = new UserRequestDTO(null, null, email, null, null);
+
+        return updateUser(userId, dto);
+    }
+
+    @Transactional UserResponseDTO updatePassword(UUID userId, String oldPassword, String newPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new UserUpdateException("Old password is incorrect.");
+        }
+
+        if (!passwordValidator.validate(newPassword)) {
+            throw new UserUpdateException("New password is invalid.");
+        }
+
+        UserRequestDTO dto = new UserRequestDTO(null, null, null, newPassword, null);
 
         return updateUser(userId, dto);
     }
