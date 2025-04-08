@@ -11,7 +11,9 @@ import com.WinSaving.api.exceptions.UserUpdateException;
 import com.WinSaving.api.repositories.MonthlyBudgetRepository;
 import com.WinSaving.api.repositories.SavingGoalRepository;
 import com.WinSaving.api.repositories.UserRepository;
+import com.WinSaving.api.util.fieldsValidation.userFields.EmailValidator;
 import com.WinSaving.api.util.fieldsValidation.userFields.FirstNameValidator;
+import com.WinSaving.api.util.fieldsValidation.userFields.LastNameValidator;
 import com.WinSaving.api.util.objectsValidation.UserRequestDTOValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,18 +32,26 @@ public class UserService {
     private final SavingGoalRepository savingGoalRepository;
     private final MonthlyBudgetRepository monthlyBudgetRepository;
     private final FirstNameValidator firstNameValidator;
+    private final LastNameValidator lastNameValidator;
+    private final EmailValidator emailValidator;
 
     @Autowired
     public UserService(
             UserRepository userRepository,
             UserRequestDTOValidation userRequestDTOValidation,
-            PasswordEncoder passwordEncoder, SavingGoalRepository savingGoalRepository, MonthlyBudgetRepository monthlyBudgetRepository) {
+            PasswordEncoder passwordEncoder,
+            SavingGoalRepository savingGoalRepository,
+            MonthlyBudgetRepository monthlyBudgetRepository,
+            FirstNameValidator firstNameValidator,
+            LastNameValidator lastNameValidator, EmailValidator emailValidator) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRequestDTOValidation = userRequestDTOValidation;
         this.savingGoalRepository = savingGoalRepository;
         this.monthlyBudgetRepository = monthlyBudgetRepository;
-        this.firstNameValidator = new FirstNameValidator();
+        this.firstNameValidator = firstNameValidator;
+        this.lastNameValidator = lastNameValidator;
+        this.emailValidator = emailValidator;
     }
 
     @Transactional
@@ -97,6 +107,26 @@ public class UserService {
         }
 
         UserRequestDTO dto = new UserRequestDTO(firstName, null, null, null, null);
+
+        return updateUser(userId, dto);
+    }
+
+    @Transactional UserResponseDTO updateLastName(UUID userId, String lastName) {
+        if(!lastNameValidator.validate(lastName)){
+            throw new UserUpdateException("Invalid last name!");
+        }
+
+        UserRequestDTO dto = new UserRequestDTO(null, lastName, null, null, null);
+
+        return updateUser(userId, dto);
+    }
+
+    @Transactional UserResponseDTO updateEmail(UUID userId, String email) {
+        if(!emailValidator.validate(email)){
+            throw new UserUpdateException("Invalid email!");
+        }
+
+        UserRequestDTO dto = new UserRequestDTO(null, null, email, null, null);
 
         return updateUser(userId, dto);
     }
