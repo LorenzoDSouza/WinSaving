@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 @Service
 public class MonthlyBudgetService {
-    private MonthlyBudgetRepository monthlyBudgetRepository;
+    private final MonthlyBudgetRepository monthlyBudgetRepository;
 
     @Autowired
     public MonthlyBudgetService(MonthlyBudgetRepository monthlyBudgetRepository) {
