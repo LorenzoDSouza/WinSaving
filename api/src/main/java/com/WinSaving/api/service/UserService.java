@@ -5,6 +5,7 @@ import com.WinSaving.api.domain.savingGoal.SavingGoal;
 import com.WinSaving.api.domain.user.User;
 import com.WinSaving.api.domain.user.UserRequestDTO;
 import com.WinSaving.api.domain.user.UserResponseDTO;
+import com.WinSaving.api.exceptions.IncorrectPasswordException;
 import com.WinSaving.api.exceptions.UserCreationException;
 import com.WinSaving.api.exceptions.UserNotFoundException;
 import com.WinSaving.api.exceptions.UserUpdateException;
@@ -148,7 +149,7 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new UserUpdateException("Old password is incorrect.");
+            throw new IncorrectPasswordException("Old password is incorrect.");
         }
 
         if (!passwordValidator.validate(newPassword)) {
@@ -188,6 +189,20 @@ public class UserService {
         monthlyBudgetRepository.deleteById(user.getMonthlyBudget().getId());
 
         userRepository.deleteById(userId);
+    }
+
+    @Transactional
+    public UserResponseDTO authenticatePassword(UUID userId, String password) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IncorrectPasswordException("The password is incorrect");
+        }
+
+        System.out.println("Logged successfully!");
+
+        return new UserResponseDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhoneNumber());
     }
 
 
