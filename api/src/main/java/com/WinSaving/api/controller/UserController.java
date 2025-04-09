@@ -15,31 +15,40 @@ import java.util.UUID;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping
     public ResponseEntity<UserResponseDTO> create(@RequestBody UserRequestDTO body) {
-        UserResponseDTO user = this.userService.createUser(body);
+        UserResponseDTO user = userService.createUser(body);
         return ResponseEntity.ok(user);
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponseDTO> getById(@PathVariable UUID userId) {
-        UserResponseDTO user = this.userService.getUserById(userId);
+        UserResponseDTO user = userService.getUserById(userId);
         return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{userId}")
     public ResponseEntity<UserResponseDTO> update(@PathVariable UUID userId, @RequestBody UserRequestDTO body) {
-        UserResponseDTO user = this.userService.updateUser(userId, body);
+        UserResponseDTO user = userService.updateUser(userId, body);
         return ResponseEntity.ok(user);
     }
 
     @DeleteMapping("{userId}")
     public ResponseEntity<UserResponseDTO> delete(@PathVariable UUID userId) {
-        this.userService.deleteUser(userId);
+        userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{userId}/login")
+    public ResponseEntity<UserResponseDTO> login (@PathVariable UUID userId, @RequestParam String password) {
+        UserResponseDTO user = userService.authenticatePassword(userId, password);
+        return ResponseEntity.ok(user);
     }
 }
 
