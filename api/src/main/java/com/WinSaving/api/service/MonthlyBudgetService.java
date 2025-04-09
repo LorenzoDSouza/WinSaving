@@ -52,29 +52,34 @@ public class MonthlyBudgetService {
 
 
     @Transactional
-    public MonthlyBudget renewUsedAmount(UUID monthlyBudgetId) {
+    public MonthlyBudget resetUsedAmount(UUID monthlyBudgetId) {
+        MonthlyBudget budget = monthlyBudgetRepository.findById(monthlyBudgetId)
+                .orElseThrow(() -> new MonthlyBudgetNotFoundException("Monthly budget not found with id: " + monthlyBudgetId));
+
+        BigDecimal remainderMoney = budget.getOriginalAmount().subtract(budget.getUsedAmount());
+
+        budget.setUsedAmount(remainderMoney.negate());
+
+        budget.setLastReset(new Date(System.currentTimeMillis()));
+
+        System.out.println("Used amount reset! (Payday!!!). New used amount: " + budget.getUsedAmount());
+
+        return monthlyBudgetRepository.save(budget);
+    }
+
+    @Transactional
+    public boolean checkDateToResetUsedAmount(UUID monthlyBudgetId) {
         MonthlyBudget budget = monthlyBudgetRepository.findById(monthlyBudgetId)
                 .orElseThrow(() -> new MonthlyBudgetNotFoundException("Monthly budget not found with id: " + monthlyBudgetId));
 
         int todayDayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 
         if (Objects.equals(budget.getPayDay(), todayDayOfMonth)) {
-            BigDecimal remainderMoney = budget.getOriginalAmount().subtract(budget.getUsedAmount());
-
-            if (remainderMoney.compareTo(BigDecimal.ZERO) > 0) {
-                budget.setOriginalAmount(budget.getOriginalAmount().add(remainderMoney));
-            }
-
-            budget.setUsedAmount(BigDecimal.ZERO);
-
-            budget.setLastReset(new Date(System.currentTimeMillis()));
-
-            System.out.println("Used amount updated! (Payday!!!)");
-        } else {
-            System.out.println("Used amount wasn't updated... Today: " + todayDayOfMonth +  ", PayDay: " + budget.getPayDay());
+            resetUsedAmount(monthlyBudgetId);
+            return true;
         }
 
-        return monthlyBudgetRepository.save(budget);
+        return false;
     }
 
     @Transactional
