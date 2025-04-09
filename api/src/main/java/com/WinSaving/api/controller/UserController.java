@@ -50,5 +50,35 @@ public class UserController {
         UserResponseDTO user = userService.authenticatePassword(userId, password);
         return ResponseEntity.ok(user);
     }
+
+    @PutMapping("/{userId}/first-name")
+    public ResponseEntity<UserResponseDTO> updateFirstName(@PathVariable UUID userId, @RequestParam String firstName) {
+        UserResponseDTO user = userService.updateFirstName(userId, firstName);
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/{userId}/last-name")
+    public ResponseEntity<UserResponseDTO> updateLastName(@PathVariable UUID userId, @RequestParam String lastName) {
+        UserResponseDTO user = userService.updateLastName(userId, lastName);
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/{userId}/email")
+    public ResponseEntity<UserResponseDTO> updateEmail(@PathVariable UUID userId, @RequestParam String email) {
+        UserResponseDTO user = userService.updateEmail(userId, email);
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/{userId}/password")
+    public ResponseEntity<UserResponseDTO> updatePassword(@PathVariable UUID userId, @RequestParam String oldPassword, @RequestParam String newPassword) {
+        UserResponseDTO user = userService.updatePassword(userId, oldPassword, newPassword);
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/{userId}/phone")
+    public ResponseEntity<UserResponseDTO> updatePhoneNumber(@PathVariable UUID userId, @RequestParam String phone) {
+        UserResponseDTO user = userService.updatePhoneNumber(userId, phone);
+        return ResponseEntity.ok(user);
+    }
 }
 
