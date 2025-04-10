@@ -1,5 +1,7 @@
 package com.WinSaving.api.service;
 
+import com.WinSaving.api.domain.expense.Expense;
+import com.WinSaving.api.domain.expense.ExpenseRequestDTO;
 import com.WinSaving.api.domain.monthlyBudget.MonthlyBudget;
 import com.WinSaving.api.domain.user.User;
 import com.WinSaving.api.exceptions.MonthlyBudgetNotFoundException;
@@ -20,10 +22,12 @@ import java.util.logging.Logger;
 @Service
 public class MonthlyBudgetService {
     private final MonthlyBudgetRepository monthlyBudgetRepository;
+    private final ExpenseService expenseService;
 
     @Autowired
-    public MonthlyBudgetService(MonthlyBudgetRepository monthlyBudgetRepository) {
+    public MonthlyBudgetService(MonthlyBudgetRepository monthlyBudgetRepository, ExpenseService expenseService) {
         this.monthlyBudgetRepository = monthlyBudgetRepository;
+        this.expenseService = expenseService;
     }
 
     @Transactional
@@ -89,6 +93,14 @@ public class MonthlyBudgetService {
 
         budget.setUsedAmount(usedAmount);
         return monthlyBudgetRepository.save(budget);
+    }
+
+    @Transactional
+    public Expense createExpense(ExpenseRequestDTO dto, UUID monthlyBudgetId) {
+        MonthlyBudget monthlyBudget = monthlyBudgetRepository.findById(monthlyBudgetId)
+                .orElseThrow(() -> new MonthlyBudgetNotFoundException("Monthly budget not found with id: " + monthlyBudgetId));
+
+        return expenseService.createExpense(dto, monthlyBudget);
     }
 
 
