@@ -67,7 +67,7 @@ public class MonthlyBudgetController {
         return ResponseEntity.ok(updateBudget);
     }
 
-    @PostMapping("/create-expense/{monthlyBudgetId}")
+    @PostMapping("/{monthlyBudgetId}/create-expense")
     public ResponseEntity<Expense> createExpense(@PathVariable UUID monthlyBudgetId, @RequestBody ExpenseRequestDTO expenseRequestDTO) {
         Expense expense = monthlyBudgetService.createExpense(expenseRequestDTO,monthlyBudgetId);
         return ResponseEntity.ok(expense);
