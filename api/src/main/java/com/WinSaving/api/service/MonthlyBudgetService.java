@@ -4,6 +4,7 @@ import com.WinSaving.api.domain.expense.Expense;
 import com.WinSaving.api.domain.expense.ExpenseRequestDTO;
 import com.WinSaving.api.domain.monthlyBudget.MonthlyBudget;
 import com.WinSaving.api.domain.user.User;
+import com.WinSaving.api.exceptions.DateComparisonException;
 import com.WinSaving.api.exceptions.MonthlyBudgetNotFoundException;
 import com.WinSaving.api.repositories.MonthlyBudgetRepository;
 import org.slf4j.LoggerFactory;
@@ -103,8 +104,18 @@ public class MonthlyBudgetService {
         return expenseService.createExpense(dto, monthlyBudget);
     }
 
+    @Transactional
+    public Date getLastResetDate(UUID monthlyBudgetId) {
+        MonthlyBudget monthlyBudget = monthlyBudgetRepository.findById(monthlyBudgetId)
+                .orElseThrow(() -> new MonthlyBudgetNotFoundException("Monthly budget not found with id: " + monthlyBudgetId));
 
+        return monthlyBudget.getLastReset();
+    }
 
-
+    @Transactional
+    public boolean expenseWasAfterLastReset(MonthlyBudget monthlyBudget, Expense expense) {
+        int status = monthlyBudget.getLastReset().compareTo(expense.getDate());
+        return status < 0;
+    }
 
 }
