@@ -1,5 +1,7 @@
 package com.WinSaving.api.controller;
 
+import com.WinSaving.api.domain.expense.Expense;
+import com.WinSaving.api.domain.expense.ExpenseRequestDTO;
 import com.WinSaving.api.domain.monthlyBudget.MonthlyBudget;
 import com.WinSaving.api.service.MonthlyBudgetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +65,11 @@ public class MonthlyBudgetController {
     public ResponseEntity<MonthlyBudget> resetOriginalAmount(@PathVariable UUID monthlyBudgetId) {
         MonthlyBudget updateBudget = monthlyBudgetService.resetUsedAmount(monthlyBudgetId);
         return ResponseEntity.ok(updateBudget);
+    }
+
+    @PostMapping("/create-expense/{monthlyBudgetId}")
+    public ResponseEntity<Expense> createExpense(@PathVariable UUID monthlyBudgetId, @RequestBody ExpenseRequestDTO expenseRequestDTO) {
+        Expense expense = monthlyBudgetService.createExpense(expenseRequestDTO,monthlyBudgetId);
+        return ResponseEntity.ok(expense);
     }
 }
