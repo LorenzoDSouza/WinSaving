@@ -17,8 +17,12 @@ import java.util.UUID;
 @RequestMapping("/api/monthly-budgets")
 public class MonthlyBudgetController {
 
+    private final MonthlyBudgetService monthlyBudgetService;
+
     @Autowired
-    private MonthlyBudgetService monthlyBudgetService;
+    public MonthlyBudgetController(MonthlyBudgetService monthlyBudgetService) {
+        this.monthlyBudgetService = monthlyBudgetService;
+    }
 
     @PatchMapping("/{monthlyBudgetId}/original-amount")
     public ResponseEntity<MonthlyBudget> updateOriginalAmount(@PathVariable UUID monthlyBudgetId, @RequestBody Map<String, BigDecimal> updates) {
