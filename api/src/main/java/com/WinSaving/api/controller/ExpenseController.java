@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -52,6 +53,17 @@ public class ExpenseController {
         }
 
         Expense expense = expenseService.updateDescription(expenseId, updates.get("description"));
+
+        return ResponseEntity.ok(expense);
+    }
+
+    @PatchMapping("/{expenseId}/date")
+    public ResponseEntity<Expense> updateDate(@PathVariable UUID expenseId, @RequestBody Map<String, Date> updates) {
+        if (!updates.containsKey("date")){
+            return ResponseEntity.badRequest().build();
+        }
+
+        Expense expense = expenseService.updateDate(expenseId, updates.get("date"));
 
         return ResponseEntity.ok(expense);
     }
