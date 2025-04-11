@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.WinSaving.api.domain.expense.Expense;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.UUID;
 
 @Service
@@ -90,6 +91,19 @@ public class ExpenseService {
         }
 
         expense.setDescription(newDescription);
+        return expenseRepository.save(expense);
+    }
+
+    @Transactional
+    public Expense updateDate(UUID expenseId, Date newDate) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new ExpenseNotFoundException("Expense not found with id: " + expenseId));
+
+        if(expense.getDate().equals(newDate)){
+            throw new IllegalArgumentException("New date cannot be the same as the old date!");
+        }
+
+        expense.setDate(newDate);
         return expenseRepository.save(expense);
     }
 
