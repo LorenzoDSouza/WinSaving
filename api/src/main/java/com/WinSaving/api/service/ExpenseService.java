@@ -80,6 +80,17 @@ public class ExpenseService {
         return expenseRepository.save(expense);
     }
 
+    @Transactional
+    public Expense updateDescription (UUID expenseId, String newDescription) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new ExpenseNotFoundException("Expense not found with id: " + expenseId));
 
+        if(expense.getDescription().equals(newDescription)){
+            throw new IllegalArgumentException("New description cannot be the same as the old description!");
+        }
+
+        expense.setDescription(newDescription);
+        return expenseRepository.save(expense);
+    }
 
 }
