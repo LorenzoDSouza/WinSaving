@@ -45,4 +45,15 @@ public class ExpenseController {
         return ResponseEntity.ok(expense);
     }
 
+    @PatchMapping("/{expenseId}/description")
+    public ResponseEntity<Expense> updateDescription(@PathVariable UUID expenseId, @RequestBody Map<String, String> updates) {
+        if (!updates.containsKey("description")){
+            return ResponseEntity.badRequest().build();
+        }
+
+        Expense expense = expenseService.updateDescription(expenseId, updates.get("description"));
+
+        return ResponseEntity.ok(expense);
+    }
+
 }
