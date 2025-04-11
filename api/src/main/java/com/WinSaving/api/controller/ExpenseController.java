@@ -1,6 +1,7 @@
 package com.WinSaving.api.controller;
 
 import com.WinSaving.api.domain.expense.Expense;
+import com.WinSaving.api.domain.expense.ExpenseType;
 import com.WinSaving.api.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,17 @@ public class ExpenseController {
         }
 
         Expense expense = expenseService.updateValue(expenseId, updates.get("value"));
+
+        return ResponseEntity.ok(expense);
+    }
+
+    @PatchMapping("/{expenseId}/expense-type")
+    public ResponseEntity<Expense> updateExpenseType(@PathVariable UUID expenseId, @RequestBody Map<String, ExpenseType> updates) {
+        if (!updates.containsKey("expenseType")){
+            return ResponseEntity.badRequest().build();
+        }
+
+        Expense expense = expenseService.updateExpenseType(expenseId, updates.get("expenseType"));
 
         return ResponseEntity.ok(expense);
     }
