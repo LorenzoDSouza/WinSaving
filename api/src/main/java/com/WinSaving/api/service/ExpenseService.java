@@ -1,6 +1,7 @@
 package com.WinSaving.api.service;
 
 import com.WinSaving.api.domain.expense.ExpenseRequestDTO;
+import com.WinSaving.api.domain.expense.ExpenseType;
 import com.WinSaving.api.domain.monthlyBudget.MonthlyBudget;
 import com.WinSaving.api.exceptions.DateComparisonException;
 import com.WinSaving.api.exceptions.ExpenseNotFoundException;
@@ -63,6 +64,19 @@ public class ExpenseService {
 
         expense.setValue(newValue);
 
+        return expenseRepository.save(expense);
+    }
+
+    @Transactional
+    public Expense updateExpenseType(UUID expenseId, ExpenseType newExpenseType) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new ExpenseNotFoundException("Expense not found with id: " + expenseId));
+
+        if(expense.getExpenseType().equals(newExpenseType)){
+            throw new IllegalArgumentException("New expense type cannot be the same as the old expense type!");
+        }
+
+        expense.setExpenseType(newExpenseType);
         return expenseRepository.save(expense);
     }
 
