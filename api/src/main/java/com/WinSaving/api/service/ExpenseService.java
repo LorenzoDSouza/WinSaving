@@ -96,6 +96,13 @@ public class ExpenseService {
 
     @Transactional
     public Expense updateDate(UUID expenseId, Date newDate) {
+        /*TODO: input logic will be in the frontend
+                expense was before lastReset?
+                    yes -> ask if the value will be added to the usedAmount
+                    no -> do nothing
+         */
+
+
         Expense expense = expenseRepository.findById(expenseId)
                 .orElseThrow(() -> new ExpenseNotFoundException("Expense not found with id: " + expenseId));
 
