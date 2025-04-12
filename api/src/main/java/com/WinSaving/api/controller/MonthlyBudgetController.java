@@ -2,6 +2,7 @@ package com.WinSaving.api.controller;
 
 import com.WinSaving.api.domain.expense.Expense;
 import com.WinSaving.api.domain.expense.ExpenseRequestDTO;
+import com.WinSaving.api.domain.expense.ExpenseResponseDTO;
 import com.WinSaving.api.domain.monthlyBudget.MonthlyBudget;
 import com.WinSaving.api.service.ExpenseService;
 import com.WinSaving.api.service.MonthlyBudgetService;
@@ -75,8 +76,8 @@ public class MonthlyBudgetController {
     }
 
     @PostMapping("/{monthlyBudgetId}/expense")
-    public ResponseEntity<Expense> createExpense(@PathVariable UUID monthlyBudgetId, @RequestBody ExpenseRequestDTO expenseRequestDTO) {
-        Expense expense = expenseService.createExpense(expenseRequestDTO,monthlyBudgetId);
-        return ResponseEntity.ok(expense);
+    public ResponseEntity<ExpenseResponseDTO> createExpense(@PathVariable UUID monthlyBudgetId, @RequestBody ExpenseRequestDTO expenseRequestDTO) {
+        ExpenseResponseDTO expenseResponseDTO = expenseService.createExpense(expenseRequestDTO,monthlyBudgetId);
+        return ResponseEntity.ok(expenseResponseDTO);
     }
 }
