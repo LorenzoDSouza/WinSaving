@@ -14,6 +14,7 @@ import com.WinSaving.api.domain.expense.Expense;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -40,7 +41,11 @@ public class ExpenseService {
         expense.setValue(dto.value());
         expense.setExpenseType(dto.type());
         expense.setDescription(dto.description());
-        expense.setDate(dto.date());
+        if(dto.date()!=null){
+            expense.setDate(dto.date());
+        } else {
+        expense.setDate(Date.valueOf(LocalDate.now()));
+        }
         expense.setMonthlyBudget(monthlyBudget);
 
         return expenseRepository.save(expense);
