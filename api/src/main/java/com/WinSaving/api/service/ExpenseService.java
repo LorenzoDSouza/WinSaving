@@ -41,12 +41,15 @@ public class ExpenseService {
         expense.setValue(dto.value());
         expense.setExpenseType(dto.type());
         expense.setDescription(dto.description());
+
         if(dto.date()!=null){
             expense.setDate(dto.date());
         } else {
         expense.setDate(Date.valueOf(LocalDate.now()));
         }
         expense.setMonthlyBudget(monthlyBudget);
+
+        monthlyBudgetService.addValueToUsedAmountByValue(expense.getMonthlyBudget(), dto.value());
 
         return expenseRepository.save(expense);
     }
