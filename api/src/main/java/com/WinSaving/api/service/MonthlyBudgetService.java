@@ -101,6 +101,7 @@ public class MonthlyBudgetService {
         MonthlyBudget monthlyBudget = monthlyBudgetRepository.findById(monthlyBudgetId)
                 .orElseThrow(() -> new MonthlyBudgetNotFoundException("Monthly budget not found with id: " + monthlyBudgetId));
 
+        addValueToUsedAmountByValue(monthlyBudget, dto.value());
         return expenseService.createExpense(dto, monthlyBudget);
     }
 
@@ -113,9 +114,36 @@ public class MonthlyBudgetService {
     }
 
     @Transactional
-    public boolean expenseWasAfterLastReset(MonthlyBudget monthlyBudget, Expense expense) {
+    public boolean expenseWasAfterLastReset(Expense expense) {
+        MonthlyBudget monthlyBudget = expense.getMonthlyBudget();
         int status = monthlyBudget.getLastReset().compareTo(expense.getDate());
         return status < 0;
+    }
+
+    @Transactional
+    public MonthlyBudget addValueToUsedAmountByValue(MonthlyBudget monthlyBudget, BigDecimal value){
+        BigDecimal newUsedAmount = monthlyBudget.getUsedAmount().add(value);
+
+        monthlyBudget.setUsedAmount(newUsedAmount);
+        return monthlyBudgetRepository.save(monthlyBudget);
+    }
+
+    @Transactional
+    public MonthlyBudget subtractValueToUsedAmountByValue(MonthlyBudget monthlyBudget, BigDecimal value){
+        BigDecimal newUsedAmount = monthlyBudget.getUsedAmount().subtract(value);
+
+        monthlyBudget.setUsedAmount(newUsedAmount);
+        return monthlyBudgetRepository.save(monthlyBudget);
+    }
+
+    @Transactional
+    public MonthlyBudget subtractValueToUsedAmountByExpense(Expense expense) {
+        MonthlyBudget monthlyBudget = expense.getMonthlyBudget();
+
+        BigDecimal newUsedAmount = monthlyBudget.getUsedAmount().subtract(expense.getValue());
+
+        monthlyBudget.setUsedAmount(newUsedAmount);
+        return monthlyBudgetRepository.save(monthlyBudget);
     }
 
 }
