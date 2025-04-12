@@ -29,7 +29,9 @@ public class ExpenseService {
     }
 
     @Transactional
-    public Expense createExpense(ExpenseRequestDTO dto, MonthlyBudget monthlyBudget) {
+    public Expense createExpense(ExpenseRequestDTO dto, UUID monthlyBudgetId) {
+        MonthlyBudget monthlyBudget = monthlyBudgetService.getMonthlyBudget(monthlyBudgetId);
+
         if (dto.value().compareTo(BigDecimal.ZERO) <= 0 ) {
             throw new IllegalArgumentException("Value of the expense must be greater than zero");
         }
