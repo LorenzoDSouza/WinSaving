@@ -1,6 +1,7 @@
 package com.WinSaving.api.service;
 
 import com.WinSaving.api.domain.expense.ExpenseRequestDTO;
+import com.WinSaving.api.domain.expense.ExpenseResponseDTO;
 import com.WinSaving.api.domain.expense.ExpenseType;
 import com.WinSaving.api.domain.monthlyBudget.MonthlyBudget;
 import com.WinSaving.api.exceptions.DateComparisonException;
@@ -30,7 +31,7 @@ public class ExpenseService {
     }
 
     @Transactional
-    public Expense createExpense(ExpenseRequestDTO dto, UUID monthlyBudgetId) {
+    public ExpenseResponseDTO createExpense(ExpenseRequestDTO dto, UUID monthlyBudgetId) {
         MonthlyBudget monthlyBudget = monthlyBudgetService.getMonthlyBudget(monthlyBudgetId);
 
         if (dto.value().compareTo(BigDecimal.ZERO) <= 0 ) {
@@ -51,7 +52,9 @@ public class ExpenseService {
 
         monthlyBudgetService.addValueToUsedAmountByValue(expense.getMonthlyBudget(), dto.value());
 
-        return expenseRepository.save(expense);
+        expenseRepository.save(expense);
+
+        return new ExpenseResponseDTO(expense.getId(), expense.getValue(), expense.getExpenseType(), expense.getDescription(), expense.getDate(), expense.getMonthlyBudget().getId());
     }
 
     @Transactional
