@@ -97,15 +97,6 @@ public class MonthlyBudgetService {
     }
 
     @Transactional
-    public Expense createExpense(ExpenseRequestDTO dto, UUID monthlyBudgetId) {
-        MonthlyBudget monthlyBudget = monthlyBudgetRepository.findById(monthlyBudgetId)
-                .orElseThrow(() -> new MonthlyBudgetNotFoundException("Monthly budget not found with id: " + monthlyBudgetId));
-
-        addValueToUsedAmountByValue(monthlyBudget, dto.value());
-        return expenseService.createExpense(dto, monthlyBudget);
-    }
-
-    @Transactional
     public Date getLastResetDate(UUID monthlyBudgetId) {
         MonthlyBudget monthlyBudget = monthlyBudgetRepository.findById(monthlyBudgetId)
                 .orElseThrow(() -> new MonthlyBudgetNotFoundException("Monthly budget not found with id: " + monthlyBudgetId));
