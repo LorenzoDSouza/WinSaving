@@ -54,7 +54,7 @@ public class ExpenseService {
             throw new IllegalArgumentException("New value of the expense must be greater than zero!");
         }
 
-        if (!monthlyBudgetService.expenseWasAfterLastReset(monthlyBudget, expense)) {
+        if (!monthlyBudgetService.expenseWasAfterLastReset(expense)) {
             throw new DateComparisonException
                     ("The expense value was not updated because the expense was made before the last reset!");
         }
@@ -96,13 +96,12 @@ public class ExpenseService {
 
     @Transactional
     public Expense updateDate(UUID expenseId, Date newDate) {
-        /*TODO: input logic will be in the frontend
+        /*
+        TODO: input logic will be in the frontend
                 expense was before lastReset?
                     yes -> ask if the value will be added to the usedAmount
                     no -> do nothing
          */
-
-
         Expense expense = expenseRepository.findById(expenseId)
                 .orElseThrow(() -> new ExpenseNotFoundException("Expense not found with id: " + expenseId));
 
@@ -112,6 +111,22 @@ public class ExpenseService {
 
         expense.setDate(newDate);
         return expenseRepository.save(expense);
+    }
+
+    @Transactional
+    public void deleteExpense(UUID expenseId) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new ExpenseNotFoundException("Expense not found with id: " + expenseId));
+        MonthlyBudget monthlyBudget = expense.getMonthlyBudget();
+
+        if(monthlyBudgetService.expenseWasAfterLastReset(expense)){
+            monthlyBudgetService.subtractValueToUsedAmountByExpense(expense);
+            System.out.println("The value of the used amount in the monthly budget was changed, because the expense was after the last reset");
+        } else {
+            System.out.println("The value of the used amount in the monthly budget wasn't changed, because the expense was before the last reset");
+        }
+
+        expenseRepository.delete(expense);
     }
 
 }
