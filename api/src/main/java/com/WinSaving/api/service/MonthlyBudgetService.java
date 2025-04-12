@@ -7,7 +7,6 @@ import com.WinSaving.api.domain.user.User;
 import com.WinSaving.api.exceptions.DateComparisonException;
 import com.WinSaving.api.exceptions.MonthlyBudgetNotFoundException;
 import com.WinSaving.api.repositories.MonthlyBudgetRepository;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,12 +22,10 @@ import java.util.logging.Logger;
 @Service
 public class MonthlyBudgetService {
     private final MonthlyBudgetRepository monthlyBudgetRepository;
-    private final ExpenseService expenseService;
 
     @Autowired
     public MonthlyBudgetService(MonthlyBudgetRepository monthlyBudgetRepository, ExpenseService expenseService) {
         this.monthlyBudgetRepository = monthlyBudgetRepository;
-        this.expenseService = expenseService;
     }
 
     @Transactional
