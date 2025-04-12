@@ -24,7 +24,7 @@ public class MonthlyBudgetService {
     private final MonthlyBudgetRepository monthlyBudgetRepository;
 
     @Autowired
-    public MonthlyBudgetService(MonthlyBudgetRepository monthlyBudgetRepository, ExpenseService expenseService) {
+    public MonthlyBudgetService(MonthlyBudgetRepository monthlyBudgetRepository) {
         this.monthlyBudgetRepository = monthlyBudgetRepository;
     }
 
