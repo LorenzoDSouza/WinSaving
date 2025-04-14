@@ -1,8 +1,11 @@
 package com.WinSaving.api.controller;
 
+import com.WinSaving.api.domain.savingGoal.SavingGoal;
+import com.WinSaving.api.domain.savingGoal.SavingGoalRequestDTO;
 import com.WinSaving.api.domain.user.User;
 import com.WinSaving.api.domain.user.UserRequestDTO;
 import com.WinSaving.api.domain.user.UserResponseDTO;
+import com.WinSaving.api.service.SavingGoalService;
 import com.WinSaving.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +19,12 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final SavingGoalService savingGoalService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, SavingGoalService savingGoalService) {
         this.userService = userService;
+        this.savingGoalService = savingGoalService;
     }
 
     @PostMapping
@@ -80,6 +85,12 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> updatePhoneNumber(@PathVariable UUID userId, @RequestParam String phone) {
         UserResponseDTO user = userService.updatePhoneNumber(userId, phone);
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping("/{usedId}/saving-goals")
+    public ResponseEntity<SavingGoal> createSavingGoal(@RequestBody SavingGoalRequestDTO dto, @RequestParam UUID usedId) {
+        SavingGoal savingGoal = savingGoalService.createSavingGoal(dto, usedId);
+        return ResponseEntity.ok(savingGoal);
     }
 }
 
