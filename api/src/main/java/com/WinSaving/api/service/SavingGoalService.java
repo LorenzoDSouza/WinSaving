@@ -69,8 +69,19 @@ public class SavingGoalService {
 
 
         savingGoal.setName(name);
-
         return savingGoalRepository.save(savingGoal);
     }
 
+    @Transactional
+    public SavingGoal updatePurpose(String purpose, UUID savingGoalId) {
+        if(purpose == null){
+            throw new IllegalArgumentException("Purpose is required to update saving goal!");
+        }
+
+        SavingGoal savingGoal = savingGoalRepository.findById(savingGoalId)
+                .orElseThrow(() -> new SavingGoalNotFoundException("Saving Goal not found with id: " + savingGoalId));
+
+        savingGoal.setPurpose(purpose);
+        return savingGoalRepository.save(savingGoal);
+    }
 }
