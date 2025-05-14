@@ -3,6 +3,7 @@ package com.WinSaving.api.service;
 import com.WinSaving.api.domain.savingGoal.SavingGoal;
 import com.WinSaving.api.domain.savingGoal.SavingGoalRequestDTO;
 import com.WinSaving.api.domain.user.User;
+import com.WinSaving.api.exceptions.SavingGoalNotFoundException;
 import com.WinSaving.api.exceptions.UserNotFoundException;
 import com.WinSaving.api.repositories.SavingGoalRepository;
 import com.WinSaving.api.repositories.UserRepository;
@@ -53,6 +54,21 @@ public class SavingGoalService {
         savingGoal.setPurpose(dto.purpose());
         savingGoal.setDepositPlace(dto.depositPlace());
         savingGoal.setDueDate(dto.dueDate());
+
+        return savingGoalRepository.save(savingGoal);
+    }
+
+    @Transactional
+    public SavingGoal updateName(String name, UUID savingGoalId) {
+        if(name == null){
+            throw new IllegalArgumentException("Name is required to update saving goal!");
+        }
+
+        SavingGoal savingGoal = savingGoalRepository.findById(savingGoalId)
+                .orElseThrow(() -> new SavingGoalNotFoundException("Saving Goal not found with id: " + savingGoalId));
+
+
+        savingGoal.setName(name);
 
         return savingGoalRepository.save(savingGoal);
     }
