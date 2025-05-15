@@ -3,6 +3,7 @@ package com.WinSaving.api.service;
 import com.WinSaving.api.domain.savingGoal.SavingGoal;
 import com.WinSaving.api.domain.savingGoal.SavingGoalRequestDTO;
 import com.WinSaving.api.domain.user.User;
+import com.WinSaving.api.exceptions.DateComparisonException;
 import com.WinSaving.api.exceptions.SavingGoalNotFoundException;
 import com.WinSaving.api.exceptions.UserNotFoundException;
 import com.WinSaving.api.repositories.SavingGoalRepository;
@@ -83,5 +84,84 @@ public class SavingGoalService {
 
         savingGoal.setPurpose(purpose);
         return savingGoalRepository.save(savingGoal);
+    }
+
+    @Transactional
+    public SavingGoal updateDepositPlace(String depositPlace, UUID savingGoalId){
+        if(depositPlace == null){
+            throw new IllegalArgumentException("Deposit Place is required to update saving goal!");
+        }
+
+        SavingGoal savingGoal = savingGoalRepository.findById(savingGoalId)
+                .orElseThrow(() -> new SavingGoalNotFoundException("Saving Goal not found with id: " + savingGoalId));
+
+        savingGoal.setDepositPlace(depositPlace);
+        return savingGoalRepository.save(savingGoal);
+    }
+
+    @Transactional
+    public SavingGoal updateDueDate(Date dueDate, UUID savingGoalId) {
+        if(dueDate == null){
+            throw new IllegalArgumentException("Due Date is required to update saving goal!");
+        }
+
+        SavingGoal savingGoal = savingGoalRepository.findById(savingGoalId)
+                .orElseThrow(() -> new SavingGoalNotFoundException("Saving Goal not found with id: " + savingGoalId));
+
+        if (savingGoal.getDueDate().compareTo(dueDate) == 0) {
+            throw new IllegalArgumentException("New due date cannot be the same as the old one!");
+        }
+
+        if (dueDate.compareTo(new java.sql.Date(System.currentTimeMillis())) < 0) {
+            throw new DateComparisonException("New due date cannot be in the past!");
+        }
+
+        savingGoal.setDueDate(dueDate);
+        return savingGoalRepository.save(savingGoal);
+    }
+
+    @Transactional
+    public SavingGoal updateGoalAmount(BigDecimal goalAmount, UUID savingGoalId) {
+        if(goalAmount == null){
+            throw new IllegalArgumentException("Goal amount is required to update saving goal!");
+        }
+
+        if (goalAmount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Goal amount must be greater than zero");
+        }
+
+        SavingGoal savingGoal = savingGoalRepository.findById(savingGoalId)
+                .orElseThrow(() -> new SavingGoalNotFoundException("Saving Goal not found with id: " + savingGoalId));
+
+        if (savingGoal.getGoalAmount().compareTo(goalAmount) == 0) {
+            throw new IllegalArgumentException("New goal amount cannot be the same as the old one!");
+        }
+
+        savingGoal.setGoalAmount(goalAmount);
+        return savingGoalRepository.save(savingGoal);
+    }
+
+    @Transactional
+    public SavingGoal updateTotalAmount(BigDecimal totalAmount, UUID savingGoalId) {
+        if(totalAmount == null){
+            throw new IllegalArgumentException("Total amount is required to update saving goal!");
+        }
+        if (totalAmount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Total amount must be greater than zero");
+        }
+
+        SavingGoal savingGoal = savingGoalRepository.findById(savingGoalId)
+                .orElseThrow(() -> new SavingGoalNotFoundException("Saving Goal not found with id: " + savingGoalId));
+
+        savingGoal.setTotalAmount(totalAmount);
+        return savingGoalRepository.save(savingGoal);
+    }
+
+    @Transactional
+    public void deleteSavingGoal(UUID savingGoalId) {
+        SavingGoal savingGoal = savingGoalRepository.findById(savingGoalId)
+                .orElseThrow(() -> new SavingGoalNotFoundException("Saving Goal not found with id: " + savingGoalId));
+
+        savingGoalRepository.delete(savingGoal);
     }
 }
